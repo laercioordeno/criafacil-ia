@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRIAFÁCIL IA</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#090d24;color:#fff;font-family:Arial,sans-serif}header{background:linear-gradient(110deg,#6726e8,#126bf2);padding:32px 16px;text-align:center}h1{font-size:32px;margin:0}header p{font-size:18px}main{max-width:720px;margin:auto;padding:22px}h2{font-size:23px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.card{border:1px solid #394579;border-radius:22px;background:#1a2142;color:white;min-height:145px;padding:18px 8px;cursor:pointer;font-size:18px}.card span{display:block;font-size:37px;margin-bottom:14px}.panel{margin-top:25px;background:#1a2142;border-radius:22px;padding:20px}.hidden{display:none}label{display:block;margin:15px 0 6px}input,select{width:100%;padding:13px;border-radius:10px;border:1px solid #8894bd;background:white;color:#161616;font-size:16px}button.action{background:linear-gradient(110deg,#793af2,#126bf2);border:0;border-radius:12px;color:white;padding:14px 18px;font-size:16px;margin-top:17px;width:100%;cursor:pointer}.back{background:transparent;border:1px solid #8894bd;border-radius:10px;color:white;padding:10px 15px}.preview{margin-top:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;text-align:center;aspect-ratio:1/1;border-radius:15px;overflow:hidden;background:#6334dc;padding:22px}.preview img{width:75%;max-height:55%;object-fit:contain;border-radius:12px}.preview strong{font-size:clamp(22px,6vw,34px);overflow-wrap:anywhere}.preview .price{font-size:clamp(27px,8vw,45px);font-weight:bold}.hint{font-size:13px;color:#bdc6e3;line-height:1.5}footer{text-align:center;color:#abb5d4;padding:30px}
+</style>
+</head>
+<body>
+<header><h1>✨ CRIAFÁCIL IA</h1><p>Sua criatividade sem limites!</p></header>
+<main>
+<section id="home"><h2>O que vamos criar hoje?</h2><div class="grid">
+<button class="card" onclick="openSales()"><span>🎨</span>Artes para vendas</button>
+<button class="card" onclick="comingSoon()"><span>📸</span>Fotos com IA</button>
+<button class="card" onclick="comingSoon()"><span>🎬</span>Vídeos realistas</button>
+<button class="card" onclick="comingSoon()"><span>🎵</span>Músicas com IA</button>
+<button class="card" onclick="comingSoon()"><span>🌟</span>Animes</button>
+<button class="card" onclick="comingSoon()"><span>🎓</span>Cursos rápidos</button>
+<button class="card" onclick="comingSoon()"><span>🎉</span>Convites</button>
+<button class="card" onclick="comingSoon()"><span>⚽</span>Figurinhas</button>
+</div><div class="panel"><h2>🚀 Comece a criar</h2><p>Transforme suas ideias em artes incríveis!</p><button class="action" onclick="openSales()">Começar agora</button></div></section>
+<section id="sales" class="hidden"><button class="back" onclick="goHome()">← Voltar</button><h2>🎨 Artes para vendas</h2><p>Monte sua propaganda e salve como imagem.</p>
+<label for="product">Nome do produto</label><input id="product" placeholder="Ex.: Bolo de chocolate" maxlength="70">
+<label for="price">Preço</label><input id="price" placeholder="Ex.: R$ 29,90" maxlength="30">
+<label for="photo">Foto do produto (opcional)</label><input id="photo" type="file" accept="image/*">
+<label for="color">Cor de fundo</label><select id="color"><option value="#6334dc">Roxo</option><option value="#155ee8">Azul</option><option value="#dc245c">Rosa</option><option value="#116b54">Verde</option><option value="#171d38">Escuro</option></select>
+<button class="action" onclick="createArt()">Criar minha arte</button>
+<div id="preview" class="preview" aria-label="Prévia da propaganda"><strong id="pvProduct">Seu produto aqui</strong><img id="pvImage" class="hidden" alt="Foto do produto"><div id="pvPrice" class="price">Preço especial!</div><div>✨ OFERTA ESPECIAL ✨</div></div>
+<button class="action" onclick="saveArt()">📥 Salvar arte em PNG</button><p class="hint">A imagem é criada no seu aparelho. Nenhuma foto é enviada ao servidor por esta ferramenta.</p>
+</section>
+</main><footer>CRIAFÁCIL IA © 2026</footer>
+<script>
+const $=id=>document.getElementById(id);let photoData='';
+function comingSoon(){alert('Em breve! Estamos construindo esta ferramenta.')}
+function openSales(){$('home').classList.add('hidden');$('sales').classList.remove('hidden');window.scrollTo(0,0)}
+function goHome(){$('sales').classList.add('hidden');$('home').classList.remove('hidden');window.scrollTo(0,0)}
+$('photo').addEventListener('change',e=>{const f=e.target.files[0];if(!f){photoData='';return}if(!f.type.startsWith('image/')){alert('Escolha uma imagem.');return}const r=new FileReader();r.onload=()=>{photoData=r.result;$('pvImage').src=photoData;$('pvImage').classList.remove('hidden')};r.readAsDataURL(f)});
+function createArt(){const p=$('product').value.trim()||'Seu produto aqui';const v=$('price').value.trim()||'Preço especial!';$('pvProduct').textContent=p;$('pvPrice').textContent=v;$('preview').style.background=$('color').value;}
+function wrapText(ctx,text,maxWidth){const words=text.split(/\s+/);const lines=[];let line='';for(const word of words){const next=line?line+' '+word:word;if(ctx.measureText(next).width>maxWidth&&line){lines.push(line);line=word}else line=next}if(line)lines.push(line);return lines.slice(0,4)}
+async function saveArt(){createArt();const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1080;const c=canvas.getContext('2d');c.fillStyle=$('color').value;c.fillRect(0,0,1080,1080);c.fillStyle='#fff';c.textAlign='center';c.font='bold 64px Arial';const lines=wrapText(c,$('pvProduct').textContent,960);let y=125;for(const line of lines){c.fillText(line,540,y);y+=72}if(photoData){try{const img=new Image();img.src=photoData;await img.decode();const maxW=800,maxH=500;const scale=Math.min(maxW/img.width,maxH/img.height);const w=img.width*scale,h=img.height*scale;c.drawImage(img,(1080-w)/2,Math.max(330,620-h/2),w,h)}catch(e){alert('Não foi possível incluir a foto. Tente outra imagem.');return}}c.font='bold 85px Arial';c.fillText($('pvPrice').textContent.slice(0,30),540,930,960);c.font='bold 35px Arial';c.fillText('✨ OFERTA ESPECIAL ✨',540,1010);const a=document.createElement('a');a.download='arte-criafacil.png';a.href=canvas.toDataURL('image/png');a.click()}
+</script>
+</body>
+</html>
